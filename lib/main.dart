@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const title = "Flutter";
+    const title = "Androntainer";
     return MaterialApp(
       title: title,
       theme: ThemeData(
