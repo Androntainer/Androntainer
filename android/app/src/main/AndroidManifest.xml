@@ -3,16 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.wyq0918dev.androntainer">
 
+    <uses-permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:forceQueryable="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Androntainer"
         tools:targetApi="33">
+        <meta-data
+            android:name="fake-signature"
+            android:value="@string/fake_signature" />
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />

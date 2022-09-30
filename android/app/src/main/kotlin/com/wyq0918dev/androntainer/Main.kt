@@ -7,15 +7,10 @@ package com.wyq0918dev.androntainer
 import android.app.Activity
 import android.app.Application
 import android.content.Context
-import android.graphics.Canvas
 import android.os.Build
 import android.os.Bundle
-import android.util.AttributeSet
-import android.view.MotionEvent
-import android.view.ViewGroup
-import android.view.ViewGroup.*
+import android.view.ViewGroup.LayoutParams
 import android.widget.LinearLayout
-import android.widget.SeekBar
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -26,8 +21,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -74,6 +68,8 @@ class MainActivity : AppCompatActivity() {
     // 上下文
     private lateinit var thisContext: Context
 
+    private var dynamicColor: Boolean by mutableStateOf(true)
+
     // 控件ID
     private val composeId: Int = R.id.compose_view
     private val flutterId: Int = R.id.flutter_view
@@ -82,13 +78,14 @@ class MainActivity : AppCompatActivity() {
     private val tagFlutterFragment = "flutter_fragment"
     private var flutterFragment: FlutterFragment? = null
 
+
     /**
      * --Activity生命周期函数--
      * --此Activity启动时执行--
      * App入口
      */
     override fun onCreate(savedInstanceState: Bundle?) {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         super.onCreate(savedInstanceState)
         init()
     }
@@ -100,6 +97,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun init() {
         initContext()
+        initSystemBar()
         initUi()
     }
 
@@ -110,6 +108,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun initContext() {
         thisContext = this@MainActivity
+    }
+
+    private fun initSystemBar() {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
     }
 
     /**
@@ -127,7 +129,6 @@ class MainActivity : AppCompatActivity() {
                     ComposeView(
                         context = thisContext
                     ).apply {
-                        visibility = GONE
                         id = composeId
                         setContent {
                             Layout()
@@ -147,7 +148,7 @@ class MainActivity : AppCompatActivity() {
                         flutterFragment =
                             fragmentManager.findFragmentByTag(tagFlutterFragment) as FlutterFragment?
                         if (flutterFragment == null) {
-                            flutterFragment = FlutterFragment.createDefault()
+                            flutterFragment = FlutterFragment.withNewEngine().build()
                             fragmentManager
                                 .beginTransaction()
                                 .add(
@@ -174,16 +175,8 @@ class MainActivity : AppCompatActivity() {
 
     @Composable
     private fun Layout() {
-        AndrontainerTheme(darkTheme = false, dynamicColor = true) {
+        AndrontainerTheme(dynamicColor = dynamicColor) {
             Greeting(name = "sb")
-//            Column {
-//                Text(text = "fuck!")
-//                Text(text = "fuck!")
-//                Text(text = "fuck!")
-//
-//
-//            }
-
         }
     }
 
@@ -206,7 +199,9 @@ class ComposeTest : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
+            AndrontainerTheme {
+                Greeting(name = "sb")
+            }
         }
     }
 }
