@@ -9,7 +9,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.wyq0918dev.androntainer.AndrontainerTheme
+import com.wyq0918dev.androntainer.ui.theme.AndrontainerTheme
 
 @Composable
 fun Greeting(name: String) {

@@ -1,4 +1,4 @@
-package com.wyq0918dev.androntainer
+package com.wyq0918dev.androntainer.activity
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -16,6 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.FragmentManager
+import com.wyq0918dev.androntainer.R
 import com.wyq0918dev.androntainer.ui.layout.Greeting
 import com.wyq0918dev.androntainer.ui.theme.AndrontainerTheme
 import io.flutter.embedding.android.FlutterEngineConfigurator
@@ -24,7 +25,6 @@ import io.flutter.embedding.android.TransparencyMode
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import kotlin.math.hypot
-
 
 /**
  * Androntainer Project
@@ -46,16 +46,15 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
     private val tagFlutterFragment = "flutter_fragment"
     private var flutterFragment: FlutterFragment? = null
 
-
     /**
      * --Activity生命周期函数--
      * --此Activity启动时执行--
      * App入口
      */
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         init()
-
     }
 
     override fun run() {

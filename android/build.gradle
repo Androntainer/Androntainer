@@ -4,8 +4,12 @@ buildscript {
         compose_version = '1.2.1'
     }
     repositories {
+        gradlePluginPortal()
         google()
         mavenCentral()
+        maven { url 'https://jitpack.io' }
+        mavenLocal()
+        gradlePluginPortal()
     }
 
     dependencies {
@@ -16,8 +20,12 @@ buildscript {
 
 allprojects {
     repositories {
+        gradlePluginPortal()
         google()
         mavenCentral()
+        maven { url 'https://jitpack.io' }
+        mavenLocal()
+        gradlePluginPortal()
     }
 }
 
