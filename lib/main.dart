@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -48,15 +49,20 @@ class _MyHomePageState extends State<MyHomePage> {
       // 通过渠道，调用原生代码代码的方法
       Future future = channel.invokeMethod("compose_visibility");
       // 打印执行的结果
-      print(future.toString());
+      if (kDebugMode) {
+        print(future.toString());
+      }
     } on PlatformException catch(e) {
-      print(e.toString());
+      if (kDebugMode) {
+        print(e.toString());
+      }
     }
   }
 
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
