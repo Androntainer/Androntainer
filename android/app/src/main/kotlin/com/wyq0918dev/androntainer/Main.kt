@@ -164,12 +164,6 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
     @Suppress("DEPRECATION")
     private fun initSystemBar() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-            WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
-            WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
         val option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         val decorView = window.decorView
         val visibility: Int = decorView.systemUiVisibility
@@ -186,6 +180,23 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
             ConstraintLayout(
                 thisContext
             ).apply {
+                addView(
+                    ComposeView(
+                        context = thisContext
+                    ).apply {
+                        clipToPadding = true
+                        fitsSystemWindows = true
+                        visibility = VISIBLE
+                        id = composeId
+                        setContent {
+                            Layout()
+                        }
+                    },
+                    LayoutParams(
+                        LayoutParams.MATCH_PARENT,
+                        LayoutParams.MATCH_PARENT
+                    )
+                )
                 addView(
                     ConstraintLayout(
                         thisContext
@@ -214,23 +225,6 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
                                             tagFlutterFragment
                                         )
                                         .commit()
-                                }
-                            },
-                            LayoutParams(
-                                LayoutParams.MATCH_PARENT,
-                                LayoutParams.MATCH_PARENT
-                            )
-                        )
-                        addView(
-                            ComposeView(
-                                context = thisContext
-                            ).apply {
-                                clipToPadding = true
-                                fitsSystemWindows = true
-                                visibility = VISIBLE
-                                id = composeId
-                                setContent {
-                                    Layout()
                                 }
                             },
                             LayoutParams(
@@ -272,14 +266,14 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         val messenger = flutterEngine.dartExecutor.binaryMessenger
         val channel = MethodChannel(messenger, "compose_visibility")
-        val compose = findViewById<ComposeView>(composeId)
+        val flutter = findViewById<FragmentContainerView>(flutterId)
         channel.setMethodCallHandler { call, res ->
             when (call.method) {
                 "compose_visibility" -> {
-                    if (compose.visibility == GONE) {
-                        compose.visibility = VISIBLE
+                    if (flutter.visibility == GONE) {
+                        flutter.visibility = VISIBLE
                     } else {
-                        compose.visibility = GONE
+                        flutter.visibility = GONE
                     }
                     res.success("这是执行的结果")
                 }
