@@ -7,14 +7,23 @@ package com.wyq0918dev.androntainer
 import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.content.Intent
+import android.content.res.Resources.Theme
 import android.os.Build
 import android.os.Bundle
+import android.view.View
+import android.view.ViewAnimationUtils
+import android.view.ViewGroup
 import android.view.ViewGroup.*
+import android.view.WindowManager
+import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,17 +42,22 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
+import androidx.core.view.marginTop
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.FragmentManager
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.MaterialToolbar
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.android.FlutterEngineConfigurator
 import io.flutter.embedding.android.FlutterFragment
+import io.flutter.embedding.android.TransparencyMode
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
+import kotlin.math.hypot
 
 
 /**
@@ -68,7 +82,7 @@ class App : Application() {
  * MainActivity
  */
 
-class MainActivity : AppCompatActivity(), FlutterEngineConfigurator {
+class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
 
     // 上下文
     private lateinit var thisContext: Context
@@ -76,8 +90,10 @@ class MainActivity : AppCompatActivity(), FlutterEngineConfigurator {
     private var dynamicColor: Boolean by mutableStateOf(true)
 
     // 控件ID
+    private val mainId: Int = R.id.main_view
     private val composeId: Int = R.id.compose_view
     private val flutterId: Int = R.id.flutter_view
+    private val logoId: Int = R.id.logo_view
 
     // Flutter相关
     private val tagFlutterFragment = "flutter_fragment"
@@ -90,9 +106,39 @@ class MainActivity : AppCompatActivity(), FlutterEngineConfigurator {
      * App入口
      */
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         init()
+        postAnim()
+    }
+
+    override fun run() {
+        val logo = findViewById<AppCompatImageView>(logoId)
+        val main = findViewById<ConstraintLayout>(mainId)
+        val cx = logo.x + logo.width / 2f
+        val cy = logo.y + logo.height / 2f
+        val startRadius = hypot(logo.width.toFloat(), logo.height.toFloat())
+        val endRadius = hypot(main.width.toFloat(), main.height.toFloat())
+        val circularAnim = ViewAnimationUtils
+            .createCircularReveal(main, cx.toInt(), cy.toInt(), startRadius, endRadius)
+            .setDuration(800)
+        logo.animate()
+            .alpha(0f)
+            .scaleX(1.3f)
+            .scaleY(1.3f)
+            .setDuration(600)
+            .withEndAction {
+                logo.visibility = View.GONE
+            }
+            .withStartAction {
+                main.visibility = View.VISIBLE
+                circularAnim.start()
+            }
+            .start()
+    }
+
+    private fun postAnim() {
+        findViewById<ConstraintLayout>(mainId).visibility = INVISIBLE
+        findViewById<ConstraintLayout>(mainId).postDelayed(this, 200)
     }
 
     /**
@@ -115,8 +161,19 @@ class MainActivity : AppCompatActivity(), FlutterEngineConfigurator {
         thisContext = this@MainActivity
     }
 
+    @Suppress("DEPRECATION")
     private fun initSystemBar() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+            WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
+            WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+        val option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        val decorView = window.decorView
+        val visibility: Int = decorView.systemUiVisibility
+        decorView.systemUiVisibility = visibility or option
     }
 
     /**
@@ -126,44 +183,70 @@ class MainActivity : AppCompatActivity(), FlutterEngineConfigurator {
 
     private fun initUi() {
         setContentView(
-            LinearLayout(
+            ConstraintLayout(
                 thisContext
             ).apply {
-                orientation = LinearLayout.HORIZONTAL
                 addView(
-                    ComposeView(
-                        context = thisContext
+                    ConstraintLayout(
+                        thisContext
                     ).apply {
-                        visibility = GONE
-                        id = composeId
-                        setContent {
-                            Layout()
-                        }
-                    },
-                    LayoutParams(
-                        200,
-                        LayoutParams.MATCH_PARENT
-                    )
+                        id = mainId
+                        addView(
+                            FragmentContainerView(
+                                context = thisContext
+                            ).apply {
+                                id = flutterId
+                                visibility = VISIBLE
+                                val fragmentManager: FragmentManager = supportFragmentManager
+                                flutterFragment =
+                                    fragmentManager.findFragmentByTag(tagFlutterFragment) as FlutterFragment?
+                                if (flutterFragment == null) {
+                                    flutterFragment = FlutterFragment
+                                        .withNewEngine()
+                                        .transparencyMode(TransparencyMode.transparent)
+                                        .shouldAttachEngineToActivity(true)
+                                        .build()
+                                    fragmentManager
+                                        .beginTransaction()
+                                        .add(
+                                            flutterId,
+                                            flutterFragment!!,
+                                            tagFlutterFragment
+                                        )
+                                        .commit()
+                                }
+                            },
+                            LayoutParams(
+                                LayoutParams.MATCH_PARENT,
+                                LayoutParams.MATCH_PARENT
+                            )
+                        )
+                        addView(
+                            ComposeView(
+                                context = thisContext
+                            ).apply {
+                                clipToPadding = true
+                                fitsSystemWindows = true
+                                visibility = VISIBLE
+                                id = composeId
+                                setContent {
+                                    Layout()
+                                }
+                            },
+                            LayoutParams(
+                                LayoutParams.MATCH_PARENT,
+                                LayoutParams.MATCH_PARENT
+                            )
+                        )
+                    }
                 )
                 addView(
-                    FragmentContainerView(
-                        context = thisContext
+                    AppCompatImageView(
+                        thisContext
                     ).apply {
-                        id = flutterId
-                        val fragmentManager: FragmentManager = supportFragmentManager
-                        flutterFragment =
-                            fragmentManager.findFragmentByTag(tagFlutterFragment) as FlutterFragment?
-                        if (flutterFragment == null) {
-                            flutterFragment = FlutterFragment.withNewEngine().build()
-                            fragmentManager
-                                .beginTransaction()
-                                .add(
-                                    flutterId,
-                                    flutterFragment!!,
-                                    tagFlutterFragment
-                                )
-                                .commit()
-                        }
+                        id = logoId
+                        setImageDrawable(getDrawable(R.drawable.ic_baseline_androntainer_plat_logo_24))
+                        scaleType = ImageView.ScaleType.CENTER
                     },
                     LayoutParams(
                         LayoutParams.MATCH_PARENT,
@@ -186,25 +269,14 @@ class MainActivity : AppCompatActivity(), FlutterEngineConfigurator {
         }
     }
 
-    /**
-     * --Activity生命周期函数--
-     * --此Activity销毁时执行--
-     * 将FlutterFragment内容清空
-     */
-
-    override fun onDestroy() {
-        super.onDestroy()
-        flutterFragment = null
-    }
-
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         val messenger = flutterEngine.dartExecutor.binaryMessenger
         val channel = MethodChannel(messenger, "compose_visibility")
         val compose = findViewById<ComposeView>(composeId)
         channel.setMethodCallHandler { call, res ->
-            when(call.method) {
+            when (call.method) {
                 "compose_visibility" -> {
-                    if (compose.visibility == GONE){
+                    if (compose.visibility == GONE) {
                         compose.visibility = VISIBLE
                     } else {
                         compose.visibility = GONE
@@ -220,6 +292,57 @@ class MainActivity : AppCompatActivity(), FlutterEngineConfigurator {
 
     override fun cleanUpFlutterEngine(flutterEngine: FlutterEngine) {
 
+    }
+
+    override fun onPostResume() {
+        super.onPostResume()
+        flutterFragment?.onPostResume()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        if (intent != null) {
+            flutterFragment?.onNewIntent(intent)
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        flutterFragment?.onBackPressed()
+    }
+
+    @Suppress("DEPRECATION")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        flutterFragment?.onRequestPermissionsResult(
+            requestCode,
+            permissions,
+            grantResults
+        )
+    }
+
+    override fun onUserLeaveHint() {
+        flutterFragment?.onUserLeaveHint()
+    }
+
+    override fun onTrimMemory(level: Int) {
+        super.onTrimMemory(level)
+        flutterFragment?.onTrimMemory(level)
+    }
+
+    /**
+     * --Activity生命周期函数--
+     * --此Activity销毁时执行--
+     * 将FlutterFragment内容清空
+     */
+
+    override fun onDestroy() {
+        super.onDestroy()
+        flutterFragment = null
+        findViewById<ConstraintLayout>(mainId).removeCallbacks(this)
     }
 }
 
