@@ -9,8 +9,9 @@ import android.app.Application
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.view.ViewGroup.LayoutParams
+import android.view.ViewGroup.*
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -32,13 +33,17 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.FragmentManager
 import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterEngineConfigurator
 import io.flutter.embedding.android.FlutterFragment
+import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.plugin.common.MethodChannel
 
 
 /**
@@ -63,7 +68,7 @@ class App : Application() {
  * MainActivity
  */
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), FlutterEngineConfigurator {
 
     // 上下文
     private lateinit var thisContext: Context
@@ -129,6 +134,7 @@ class MainActivity : AppCompatActivity() {
                     ComposeView(
                         context = thisContext
                     ).apply {
+                        visibility = GONE
                         id = composeId
                         setContent {
                             Layout()
@@ -189,6 +195,31 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         flutterFragment = null
+    }
+
+    override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+        val messenger = flutterEngine.dartExecutor.binaryMessenger
+        val channel = MethodChannel(messenger, "compose_visibility")
+        val compose = findViewById<ComposeView>(composeId)
+        channel.setMethodCallHandler { call, res ->
+            when(call.method) {
+                "compose_visibility" -> {
+                    if (compose.visibility == GONE){
+                        compose.visibility = VISIBLE
+                    } else {
+                        compose.visibility = GONE
+                    }
+                    res.success("这是执行的结果")
+                }
+                else -> {
+                    res.error("error_code", "error_message", null)
+                }
+            }
+        }
+    }
+
+    override fun cleanUpFlutterEngine(flutterEngine: FlutterEngine) {
+
     }
 }
 

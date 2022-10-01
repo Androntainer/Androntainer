@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,10 +34,26 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 1145141919810;
 
   void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+    // setState(() {
+    //   _counter++;
+    // });
+    callNativeMethod();
   }
+
+  // 创建渠道
+  static const channel = MethodChannel("compose_visibility");
+
+  void callNativeMethod() {
+    try {
+      // 通过渠道，调用原生代码代码的方法
+      Future future = channel.invokeMethod("compose_visibility");
+      // 打印执行的结果
+      print(future.toString());
+    } on PlatformException catch(e) {
+      print(e.toString());
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
