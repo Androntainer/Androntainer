@@ -3,9 +3,10 @@ buildscript {
         kotlin_version = '1.7.10'
         compose_version = '1.2.1'
     }
+
     repositories {
-        gradlePluginPortal()
         google()
+        gradlePluginPortal()
         mavenCentral()
         maven { url 'https://jitpack.io' }
         mavenLocal()
@@ -20,8 +21,8 @@ buildscript {
 
 allprojects {
     repositories {
-        gradlePluginPortal()
         google()
+        gradlePluginPortal()
         mavenCentral()
         maven { url 'https://jitpack.io' }
         mavenLocal()

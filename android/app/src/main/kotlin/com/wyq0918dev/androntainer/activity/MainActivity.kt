@@ -16,12 +16,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.FragmentManager
+import com.google.android.material.composethemeadapter.MdcTheme
 import com.wyq0918dev.androntainer.R
 import com.wyq0918dev.androntainer.ui.layout.Greeting
-import com.wyq0918dev.androntainer.ui.theme.AndrontainerTheme
 import io.flutter.embedding.android.FlutterEngineConfigurator
 import io.flutter.embedding.android.FlutterFragment
-import io.flutter.embedding.android.TransparencyMode
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import kotlin.math.hypot
@@ -129,27 +128,27 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
                 thisContext
             ).apply {
                 addView(
-                    ComposeView(
-                        context = thisContext
-                    ).apply {
-                        clipToPadding = true
-                        fitsSystemWindows = true
-                        visibility = VISIBLE
-                        id = composeId
-                        setContent {
-                            Layout()
-                        }
-                    },
-                    LayoutParams(
-                        LayoutParams.MATCH_PARENT,
-                        LayoutParams.MATCH_PARENT
-                    )
-                )
-                addView(
                     ConstraintLayout(
                         thisContext
                     ).apply {
                         id = mainId
+                        addView(
+                            ComposeView(
+                                context = thisContext
+                            ).apply {
+                                clipToPadding = true
+                                fitsSystemWindows = true
+                                visibility = VISIBLE
+                                id = composeId
+                                setContent {
+                                    Layout()
+                                }
+                            },
+                            LayoutParams(
+                                LayoutParams.MATCH_PARENT,
+                                LayoutParams.MATCH_PARENT
+                            )
+                        )
                         addView(
                             FragmentContainerView(
                                 thisContext
@@ -162,7 +161,6 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
                                 if (flutterFragment == null) {
                                     flutterFragment = FlutterFragment
                                         .withNewEngine()
-                                        .transparencyMode(TransparencyMode.transparent)
                                         .shouldAttachEngineToActivity(true)
                                         .build()
                                     fragmentManager
@@ -180,7 +178,11 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
                                 LayoutParams.MATCH_PARENT
                             )
                         )
-                    }
+                    },
+                    LayoutParams(
+                        LayoutParams.MATCH_PARENT,
+                        LayoutParams.MATCH_PARENT
+                    )
                 )
                 addView(
                     AppCompatImageView(
@@ -207,14 +209,21 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
 
     @Composable
     private fun Layout() {
-        AndrontainerTheme {
+        MdcTheme(
+            context = thisContext,
+            readColors = true,
+            readTypography = true,
+            readShapes = true,
+            setTextColors = true,
+            setDefaultFontFamily = true,
+        ) {
             Greeting(name = "sb")
         }
     }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         val messenger = flutterEngine.dartExecutor.binaryMessenger
-        val channel = MethodChannel(messenger, "compose_visibility")
+        val channel = MethodChannel(messenger, "origin")
         val flutter = findViewById<FragmentContainerView>(flutterId)
         channel.setMethodCallHandler { call, res ->
             when (call.method) {
