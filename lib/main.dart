@@ -32,23 +32,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  static const channel = MethodChannel("origin");
   int _counter = 1145141919810;
 
   void _incrementCounter() {
     // setState(() {
     //   _counter++;
     // });
-    callNativeMethod();
+    origin();
   }
 
-  // 创建渠道
-  static const channel = MethodChannel("compose_visibility");
-
-  void callNativeMethod() {
+  void origin() {
     try {
-      // 通过渠道，调用原生代码代码的方法
-      Future future = channel.invokeMethod("compose_visibility");
-      // 打印执行的结果
+      Future future = channel.invokeMethod("origin");
       if (kDebugMode) {
         print(future.toString());
       }
@@ -58,7 +54,6 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     }
   }
-
 
   @override
   Widget build(BuildContext context) {

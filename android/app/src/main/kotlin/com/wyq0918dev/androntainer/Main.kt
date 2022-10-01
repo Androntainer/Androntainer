@@ -1,57 +1,23 @@
-/**
- * Androntainer Project
- * Copyright (c) 2022 wyq0918dev.
- */
 package com.wyq0918dev.androntainer
 
-import android.app.Activity
-import android.app.Application
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources.Theme
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewAnimationUtils
-import android.view.ViewGroup
 import android.view.ViewGroup.*
-import android.view.WindowManager
-import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
-import androidx.core.view.marginTop
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.FragmentManager
-import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.MaterialToolbar
-import io.flutter.embedding.android.FlutterActivity
+import com.wyq0918dev.androntainer.ui.layout.Greeting
+import com.wyq0918dev.androntainer.ui.theme.AndrontainerTheme
 import io.flutter.embedding.android.FlutterEngineConfigurator
 import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.android.TransparencyMode
@@ -61,33 +27,14 @@ import kotlin.math.hypot
 
 
 /**
- * Application Global state class
- */
-
-class App : Application() {
-
-    /**
-     * Application lifecycle function
-     * Executed when the application is started
-     * Initialize applications, third-party libraries, dynamic colors
-     */
-
-    override fun onCreate() {
-        super.onCreate()
-
-    }
-}
-
-/**
- * MainActivity
+ * Androntainer Project
+ * Copyright (c) 2022 wyq0918dev.
  */
 
 class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
 
     // 上下文
     private lateinit var thisContext: Context
-
-    private var dynamicColor: Boolean by mutableStateOf(true)
 
     // 控件ID
     private val mainId: Int = R.id.main_view
@@ -108,7 +55,7 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         init()
-        postAnim()
+
     }
 
     override fun run() {
@@ -136,7 +83,7 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
             .start()
     }
 
-    private fun postAnim() {
+    private fun initPostAnim() {
         findViewById<ConstraintLayout>(mainId).visibility = INVISIBLE
         findViewById<ConstraintLayout>(mainId).postDelayed(this, 200)
     }
@@ -150,6 +97,7 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
         initContext()
         initSystemBar()
         initUi()
+        initPostAnim()
     }
 
     /**
@@ -175,6 +123,7 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
      * 加载UI界面
      */
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun initUi() {
         setContentView(
             ConstraintLayout(
@@ -204,7 +153,7 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
                         id = mainId
                         addView(
                             FragmentContainerView(
-                                context = thisContext
+                                thisContext
                             ).apply {
                                 id = flutterId
                                 visibility = VISIBLE
@@ -239,6 +188,7 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
                         thisContext
                     ).apply {
                         id = logoId
+                        visibility = VISIBLE
                         setImageDrawable(getDrawable(R.drawable.ic_baseline_androntainer_plat_logo_24))
                         scaleType = ImageView.ScaleType.CENTER
                     },
@@ -258,7 +208,7 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
 
     @Composable
     private fun Layout() {
-        AndrontainerTheme(dynamicColor = dynamicColor) {
+        AndrontainerTheme {
             Greeting(name = "sb")
         }
     }
@@ -269,13 +219,13 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
         val flutter = findViewById<FragmentContainerView>(flutterId)
         channel.setMethodCallHandler { call, res ->
             when (call.method) {
-                "compose_visibility" -> {
+                "origin" -> {
                     if (flutter.visibility == GONE) {
                         flutter.visibility = VISIBLE
                     } else {
                         flutter.visibility = GONE
                     }
-                    res.success("这是执行的结果")
+                    res.success("success")
                 }
                 else -> {
                     res.error("error_code", "error_message", null)
@@ -301,7 +251,9 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
     }
 
     @Deprecated("Deprecated in Java")
+    @Suppress("DEPRECATION")
     override fun onBackPressed() {
+        super.onBackPressed()
         flutterFragment?.onBackPressed()
     }
 
@@ -311,6 +263,7 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         flutterFragment?.onRequestPermissionsResult(
             requestCode,
             permissions,
@@ -319,6 +272,7 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
     }
 
     override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
         flutterFragment?.onUserLeaveHint()
     }
 
@@ -339,118 +293,3 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
         findViewById<ConstraintLayout>(mainId).removeCallbacks(this)
     }
 }
-
-class FlutterTest : FlutterActivity()
-
-class ComposeTest : ComponentActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            AndrontainerTheme {
-                Greeting(name = "sb")
-            }
-        }
-    }
-}
-
-val Typography = Typography(
-    bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    )
-)
-
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
-
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
-
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-)
-
-@Composable
-fun AndrontainerTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
-) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            (view.context as Activity).window.statusBarColor = colorScheme.primary.toArgb()
-            ViewCompat.getWindowInsetsController(view)?.isAppearanceLightStatusBars = darkTheme
-        }
-    }
-
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Greeting(name: String) {
-    Scaffold(
-        modifier = Modifier.fillMaxWidth(),
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = "sb")
-                },
-                modifier = Modifier.fillMaxWidth(),
-                navigationIcon = {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(imageVector = Icons.Filled.Home, contentDescription = null)
-                    }
-                },
-                // scrollBehavior =
-            )
-        }
-    ) { paddingValues ->
-        Surface(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            Text(text = "Hello $name!")
-            // WidgetFlutter()
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    AndrontainerTheme {
-        Greeting("Android")
-    }
-}
-
-
