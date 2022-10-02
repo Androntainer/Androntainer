@@ -36,7 +36,7 @@ class DisplayActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator
     private lateinit var thisContext: Context
     private lateinit var binding: ActivityDisplayBinding
     private lateinit var navigationMenu: AppCompatImageButton
-    //private lateinit var navController: NavController
+    private lateinit var navController: NavController
     private var flutterFragment: FlutterFragment? = null
     private val tagFlutterFragment = "flutter_fragment"
     private var isFullscreen: Boolean = false
@@ -46,7 +46,6 @@ class DisplayActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator
         private const val UI_ANIMATION_DELAY = 300
         private const val UI_DELAY_MILLIS = 100
         lateinit var drawer: DrawerLayout
-        lateinit var navController: NavController
 
         @Composable
         fun ComposeLayout() {
