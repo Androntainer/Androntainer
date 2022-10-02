@@ -236,7 +236,11 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
                     res.success("success")
                 }
                 else -> {
-                    res.error("error_code", "error_message", null)
+                    res.error(
+                        "error_code",
+                        "error_message",
+                        null
+                    )
                 }
             }
         }

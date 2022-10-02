@@ -41,7 +41,7 @@ fun Greeting(name: String) {
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 fun DefaultPreview() {
     AndrontainerTheme {
