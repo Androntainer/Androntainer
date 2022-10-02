@@ -37,4 +37,20 @@
         <item name="android:windowBackground">?android:colorBackground</item>
     </style>
 
+    <style name="Theme.Androntainer.Fullscreen" parent="Theme.Androntainer">
+        <item name="android:actionBarStyle">@style/Widget.Theme.Androntainer.ActionBar.Fullscreen
+        </item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+    </style>
+
+    <style name="ThemeOverlay.Androntainer.FullscreenContainer" parent="">
+        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
+        <item name="fullscreenTextColor">@color/light_blue_A200</item>
+    </style>
+
+    <style name="Theme.Androntainer.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Androntainer.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 </resources>

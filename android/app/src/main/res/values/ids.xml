@@ -4,4 +4,8 @@
     <item name="flutter_view" type="id" />
     <item name="logo_view" type="id" />
     <item name="main_view" type="id" />
+
+
+    <item name="nav_flutter" type="id" />
+    <item name="nav_compose" type="id"/>
 </resources>

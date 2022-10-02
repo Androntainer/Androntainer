@@ -1,4 +1,4 @@
-package com.wyq0918dev.androntainer.core
+package com.wyq0918dev.androntainer.core.app
 
 import android.app.Application
 import android.os.Build

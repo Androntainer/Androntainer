@@ -6,8 +6,10 @@
     <uses-permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
-        android:name=".core.App"
+        android:name=".core.app.App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:forceQueryable="true"
@@ -17,13 +19,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Androntainer"
         tools:targetApi="33">
+        <activity
+            android:name=".DisplayActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="true"
+            android:label="@string/title_activity_display"
+            android:theme="@style/Theme.Androntainer.Fullscreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <meta-data
             android:name="fake-signature"
             android:value="@string/fake_signature" />
         <meta-data
             android:name="flutterEmbedding"
-            android:value="2" />
-        <!-- MainActivity -->
+            android:value="2" /> <!-- MainActivity -->
         <activity
             android:name=".activity.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -35,10 +49,9 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
             </intent-filter>
-        </activity>
-        <!-- Test Activity -->
+        </activity> <!-- Test Activity -->
         <activity
             android:name=".test.FlutterTest"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
@@ -67,6 +80,13 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name=".service.InAppBillingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.android.vending.billing.InAppBillingService.BIND" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
