@@ -83,32 +83,7 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
     override fun run() {
 
     }
-
-    override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
-        val messenger = flutterEngine.dartExecutor.binaryMessenger
-        val channel = MethodChannel(messenger, "android")
-
-        channel.setMethodCallHandler { call, res ->
-            when (call.method) {
-                "origin" -> {
-                    Toast.makeText(this, "???", Toast.LENGTH_SHORT).show()
-                    res.success("success")
-                }
-                else -> {
-                    res.error(
-                        "error_code",
-                        "error_message",
-                        null
-                    )
-                }
-            }
-        }
-    }
-
-    override fun cleanUpFlutterEngine(flutterEngine: FlutterEngine) {
-
-    }
-
+    
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         hideHandler.removeCallbacks(hideRunnable)
@@ -158,12 +133,35 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
         flutterFragment?.onTrimMemory(level)
     }
 
+    override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+        val messenger = flutterEngine.dartExecutor.binaryMessenger
+        val channel = MethodChannel(messenger, "android")
+
+        channel.setMethodCallHandler { call, res ->
+            when (call.method) {
+                "origin" -> {
+                    Toast.makeText(this, "???", Toast.LENGTH_SHORT).show()
+                    res.success("success")
+                }
+                else -> {
+                    res.error(
+                        "error_code",
+                        "error_message",
+                        null
+                    )
+                }
+            }
+        }
+    }
+
+    override fun cleanUpFlutterEngine(flutterEngine: FlutterEngine) {
+
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         flutterFragment = null
-        //  composeView = null
     }
-
 
     private fun init() {
         initFast()
