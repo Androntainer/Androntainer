@@ -19,12 +19,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Androntainer"
         tools:targetApi="33">
+        <meta-data
+            android:name="fake-signature"
+            android:value="@string/fake_signature" />
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
+
         <activity
-            android:name=".DisplayActivity"
+            android:name=".activity.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
-            android:label="@string/title_activity_display"
             android:theme="@style/Theme.Androntainer.Fullscreen">
+            <meta-data
+                android:name="io.flutter.embedding.android.NormalTheme"
+                android:resource="@style/NormalTheme" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,14 +42,9 @@
             </intent-filter>
         </activity>
 
-        <meta-data
-            android:name="fake-signature"
-            android:value="@string/fake_signature" />
-        <meta-data
-            android:name="flutterEmbedding"
-            android:value="2" /> <!-- MainActivity -->
+        <!-- MainActivity -->
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.Main1Activity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true">
             <meta-data
@@ -51,7 +56,8 @@
 
 <!--                <category android:name="android.intent.category.LAUNCHER" />-->
             </intent-filter>
-        </activity> <!-- Test Activity -->
+        </activity>
+        <!-- Test Activity -->
         <activity
             android:name=".test.FlutterTest"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

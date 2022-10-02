@@ -7,7 +7,7 @@
     android:background="?attr/fullscreenBackgroundColor"
     android:fitsSystemWindows="false"
     android:theme="@style/ThemeOverlay.Androntainer.FullscreenContainer"
-    tools:context=".DisplayActivity">
+    tools:context=".activity.MainActivity">
 
     <FrameLayout
         android:layout_width="match_parent"

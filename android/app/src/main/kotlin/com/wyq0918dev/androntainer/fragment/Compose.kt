@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import com.google.android.material.composethemeadapter.MdcTheme
-import com.wyq0918dev.androntainer.DisplayActivity.Companion.ComposeLayout
+import com.wyq0918dev.androntainer.activity.MainActivity.Companion.ComposeLayout
 import com.wyq0918dev.androntainer.ui.values.composeId
 
 class Compose : Fragment() {
