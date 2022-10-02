@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
                         id = mainId
                         addView(
                             ComposeView(
-                                context = thisContext
+                                thisContext
                             ).apply {
                                 clipToPadding = true
                                 fitsSystemWindows = true
@@ -223,7 +223,7 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         val messenger = flutterEngine.dartExecutor.binaryMessenger
-        val channel = MethodChannel(messenger, "origin")
+        val channel = MethodChannel(messenger, "android")
         val flutter = findViewById<FragmentContainerView>(flutterId)
         channel.setMethodCallHandler { call, res ->
             when (call.method) {

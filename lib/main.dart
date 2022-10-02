@@ -32,7 +32,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  static const channel = MethodChannel("origin");
+  static const channel = MethodChannel("android");
   int _counter = 1145141919810;
 
   void _incrementCounter() {
