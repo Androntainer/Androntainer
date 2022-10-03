@@ -18,4 +18,8 @@
         android:name="com.wyq0918dev.androntainer.fragment.Compose"
         android:label="Compose"/>
 
+    <fragment
+        android:id="@id/nav_settings"
+        android:name="com.wyq0918dev.androntainer.fragment.Settings"
+        android:label="Settings" />
 </navigation>

@@ -14,21 +14,17 @@ class Compose : Fragment() {
 
     private lateinit var composeView: ComposeView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        composeView = ComposeView(
-            requireContext()
-        ).apply {
-            id = composeId
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): ComposeView {
         super.onCreateView(inflater, container, savedInstanceState)
+        composeView = ComposeView(
+            requireContext()
+        ).apply {
+            id = composeId
+        }
         return composeView
     }
 

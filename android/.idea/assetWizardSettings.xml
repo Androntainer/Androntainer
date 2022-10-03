@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/D:/Data/Android/Sdk/icons/material/materialiconstwotone/add_box/twotone_add_box_24.xml" />
+                                      <entry key="url" value="file:/D:/Data/Android/Sdk/icons/material/materialiconstwotone/info/twotone_info_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,7 +28,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_twotone_add_box_24" />
+                            <entry key="outputName" value="ic_twotone_info_24" />
                             <entry key="sourceFile" value="C:\Users\81509\FlutterProjects\Androntainer\android" />
                           </map>
                         </option>

@@ -1,12 +1,11 @@
 package com.wyq0918dev.androntainer.activity
 
 import android.annotation.SuppressLint
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.content.ServiceConnection
+import android.os.*
 import android.view.View
 import android.view.WindowInsets
 import android.widget.Toast
@@ -25,11 +24,15 @@ import com.wyq0918dev.androntainer.R
 import com.wyq0918dev.androntainer.core.Compose
 import com.wyq0918dev.androntainer.core.utils.OnDoubleClickListener
 import com.wyq0918dev.androntainer.databinding.ActivityDisplayBinding
+import com.wyq0918dev.androntainer.fragment.Flutter.Companion.flutterFragment
 import com.wyq0918dev.androntainer.fragment.Flutter.Companion.fragmentContainerView
+import com.wyq0918dev.androntainer.service.InAppBillingService
 import com.wyq0918dev.androntainer.ui.theme.AndrontainerTheme
 import io.flutter.embedding.android.FlutterEngineConfigurator
 import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.embedding.engine.FlutterEngineCache
+import io.flutter.embedding.engine.dart.DartExecutor
 import io.flutter.plugin.common.MethodChannel
 
 
@@ -39,8 +42,6 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
     private lateinit var binding: ActivityDisplayBinding
     private lateinit var navigationMenu: AppCompatImageButton
     private lateinit var navController: NavController
-    private var flutterFragment: FlutterFragment? = null
-    private val tagFlutterFragment = "flutter_fragment"
     private var isFullscreen: Boolean = false
     private val hideHandler = Handler(Looper.myLooper()!!)
 
@@ -83,7 +84,7 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
     override fun run() {
 
     }
-    
+
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         hideHandler.removeCallbacks(hideRunnable)
@@ -164,6 +165,13 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
     }
 
     private fun init() {
+//        val flutterEngine = FlutterEngine(thisContext)
+//        flutterEngine.dartExecutor.executeDartEntrypoint(
+//            DartExecutor.DartEntrypoint.createDefault()
+//        )
+//        FlutterEngineCache
+//            .getInstance()
+//            .put("myFlutter", flutterEngine)
         initFast()
         initContext()
         initServices()
@@ -176,7 +184,22 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
     }
 
     private fun initServices() {
+        val intent = Intent(this@MainActivity, InAppBillingService::class.java)
+        startService(intent)
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+    }
 
+    private val mConnection: ServiceConnection = object : ServiceConnection {
+        override fun onServiceConnected(
+            className: ComponentName,
+            service: IBinder
+        ) {
+
+        }
+
+        override fun onServiceDisconnected(arg0: ComponentName) {
+
+        }
     }
 
     private fun initFast() {
@@ -204,17 +227,16 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
         val navigationHome = binding.navigationHome
         val navView: NavigationView = binding.navView
         val fragmentContainerId = binding.navHostFragmentContentMain.id
-        val flutterContainerId = fragmentContainerView.id
+  //      val flutterContainerId = fragmentContainerView.id
         navigationMenu = binding.navigationMenu
         drawer = binding.drawerLayout
 
         val navHostFragment =
             (supportFragmentManager.findFragmentById(fragmentContainerId) as NavHostFragment?)!!
-        val fragmentManager: FragmentManager = supportFragmentManager
+
 
         navController = navHostFragment.navController
-        flutterFragment =
-            fragmentManager.findFragmentByTag(tagFlutterFragment) as FlutterFragment?
+
 
         navView.setupWithNavController(navController)
         navigationBack.setOnTouchListener(
@@ -280,20 +302,24 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
                 }
             )
         )
-        if (flutterFragment == null) {
-            flutterFragment = FlutterFragment
-                .withNewEngine()
-                .shouldAttachEngineToActivity(true)
-                .build()
-            fragmentManager
-                .beginTransaction()
-                .add(
-                    flutterContainerId,
-                    flutterFragment!!,
-                    tagFlutterFragment
-                )
-                .commit()
-        }
+
+//        val fragmentManager: FragmentManager = supportFragmentManager
+//        flutterFragment =
+//            fragmentManager.findFragmentByTag(tagFlutterFragment) as FlutterFragment?
+//        if (flutterFragment == null) {
+//            flutterFragment = FlutterFragment
+//                .withNewEngine()
+//                .shouldAttachEngineToActivity(true)
+//                .build()
+//            fragmentManager
+//                .beginTransaction()
+//                .add(
+//                    flutterContainerId,
+//                    flutterFragment!!,
+//                    tagFlutterFragment
+//                )
+//                .commit()
+//        }
     }
 
     @Preview
