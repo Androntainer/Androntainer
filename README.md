@@ -4,8 +4,8 @@ Androntainer Project.
 
 ## ReadMe
 
-- [Chinese](https://github.com)
-- [English](https://github.com)
+- [Chinese](https://github.com/Androntainer/Androntainer/blob/master/readme/README_CN.md)
+- [English](https://github.com/Androntainer/Androntainer/blob/master/readme/README_US.md)
 
 ## Getting Started
 
