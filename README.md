@@ -2,6 +2,11 @@
 
 Androntainer Project.
 
+## ReadMe
+
+- [Chinese](https://github.com)
+- [English](https://github.com)
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.

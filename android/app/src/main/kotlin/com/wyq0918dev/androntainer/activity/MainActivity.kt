@@ -165,18 +165,15 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
     }
 
     private fun init() {
-//        val flutterEngine = FlutterEngine(thisContext)
-//        flutterEngine.dartExecutor.executeDartEntrypoint(
-//            DartExecutor.DartEntrypoint.createDefault()
-//        )
-//        FlutterEngineCache
-//            .getInstance()
-//            .put("myFlutter", flutterEngine)
         initFast()
         initContext()
         initServices()
         initSystemBar()
         initUi()
+    }
+
+    private fun initFast() {
+        isFullscreen = true
     }
 
     private fun initContext() {
@@ -201,11 +198,7 @@ class MainActivity : AppCompatActivity(), Runnable, FlutterEngineConfigurator {
 
         }
     }
-
-    private fun initFast() {
-        isFullscreen = true
-    }
-
+    
     @Suppress("DEPRECATION")
     private fun initSystemBar() {
         WindowCompat.setDecorFitsSystemWindows(window, true)
