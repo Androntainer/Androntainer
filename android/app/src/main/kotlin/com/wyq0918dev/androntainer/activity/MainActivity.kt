@@ -1,4 +1,4 @@
-package com.wyq0918dev.androntainer
+package com.wyq0918dev.androntainer.activity
 
 import android.annotation.SuppressLint
 import android.content.ComponentName
@@ -9,30 +9,34 @@ import android.os.Bundle
 import android.os.IBinder
 import android.view.Menu
 import android.view.View
-import com.google.android.material.navigation.NavigationView
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
-import androidx.fragment.app.FragmentContainerView
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.navigation.NavigationView
 import com.kongzue.dialogx.dialogs.BottomMenu
 import com.kongzue.dialogx.dialogs.TipDialog
 import com.kongzue.dialogx.dialogs.WaitDialog
+import com.wyq0918dev.androntainer.R
 import com.wyq0918dev.androntainer.core.Compose
 import com.wyq0918dev.androntainer.core.utils.OnDoubleClickListener
 import com.wyq0918dev.androntainer.databinding.ActivityMainBinding
-import com.wyq0918dev.androntainer.fragment.Flutter
+import com.wyq0918dev.androntainer.fragment.Flutter.Companion.flutterFragment
+import com.wyq0918dev.androntainer.fragment.Flutter.Companion.fragmentContainerView
 import com.wyq0918dev.androntainer.service.InAppBillingService
 import com.wyq0918dev.androntainer.ui.theme.AndrontainerTheme
+import com.wyq0918dev.androntainer.ui.values.navCompose
+import com.wyq0918dev.androntainer.ui.values.navFlutter
+import com.wyq0918dev.androntainer.ui.values.navSettings
 import io.flutter.embedding.android.FlutterEngineConfigurator
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -71,7 +75,7 @@ class MainActivity : AppCompatActivity(), FlutterEngineConfigurator, Runnable {
         channel.setMethodCallHandler { call, res ->
             when (call.method) {
                 origin -> {
-                    Flutter.fragmentContainerView.visibility = View.INVISIBLE
+                    fragmentContainerView.visibility = View.INVISIBLE
                     res.success(origin + "Success!")
                     TipDialog.show(origin + "Success!", WaitDialog.TYPE.SUCCESS)
                 }
@@ -103,13 +107,13 @@ class MainActivity : AppCompatActivity(), FlutterEngineConfigurator, Runnable {
 
     override fun onPostResume() {
         super.onPostResume()
-        Flutter.flutterFragment?.onPostResume()
+        flutterFragment?.onPostResume()
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         if (intent != null) {
-            Flutter.flutterFragment?.onNewIntent(intent)
+            flutterFragment?.onNewIntent(intent)
         }
     }
 
@@ -117,7 +121,7 @@ class MainActivity : AppCompatActivity(), FlutterEngineConfigurator, Runnable {
     @Suppress("DEPRECATION")
     override fun onBackPressed() {
         super.onBackPressed()
-        Flutter.flutterFragment?.onBackPressed()
+        flutterFragment?.onBackPressed()
     }
 
     @Suppress("DEPRECATION")
@@ -127,7 +131,7 @@ class MainActivity : AppCompatActivity(), FlutterEngineConfigurator, Runnable {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Flutter.flutterFragment?.onRequestPermissionsResult(
+        flutterFragment?.onRequestPermissionsResult(
             requestCode,
             permissions,
             grantResults
@@ -136,17 +140,17 @@ class MainActivity : AppCompatActivity(), FlutterEngineConfigurator, Runnable {
 
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
-        Flutter.flutterFragment?.onUserLeaveHint()
+        flutterFragment?.onUserLeaveHint()
     }
 
     override fun onTrimMemory(level: Int) {
         super.onTrimMemory(level)
-        Flutter.flutterFragment?.onTrimMemory(level)
+        flutterFragment?.onTrimMemory(level)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Flutter.flutterFragment = null
+        flutterFragment = null
     }
 
     @Preview
@@ -218,7 +222,7 @@ class MainActivity : AppCompatActivity(), FlutterEngineConfigurator, Runnable {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_flutter, R.id.nav_compose, R.id.nav_settings
+                navFlutter, navCompose, navSettings
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -229,8 +233,8 @@ class MainActivity : AppCompatActivity(), FlutterEngineConfigurator, Runnable {
             OnDoubleClickListener(
                 object : OnDoubleClickListener.MyClickCallBack {
                     override fun onClick() {
-                        if (drawerLayout.isOpen) {
-                            navController.navigate(R.id.nav_flutter)
+                        if (!drawerLayout.isOpen) {
+                            navController.navigate(navFlutter)
                         } else {
                             drawerLayout.close()
                         }
@@ -266,22 +270,20 @@ class MainActivity : AppCompatActivity(), FlutterEngineConfigurator, Runnable {
         toolbar.showOverflowMenu()
     }
 
-
     private fun toggleFlutter() {
-        if (Flutter.fragmentContainerView.visibility == View.INVISIBLE) {
+        if (fragmentContainerView.visibility == View.INVISIBLE) {
             showFlutter()
         } else {
             hideFlutter()
         }
     }
 
-
     private fun hideFlutter() {
-        Flutter.fragmentContainerView.visibility = View.INVISIBLE
+        fragmentContainerView.visibility = View.INVISIBLE
     }
 
     private fun showFlutter() {
-        Flutter.fragmentContainerView.visibility = View.VISIBLE
+        fragmentContainerView.visibility = View.VISIBLE
     }
 
 }

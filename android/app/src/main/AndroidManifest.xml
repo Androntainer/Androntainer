@@ -18,10 +18,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Androntainer"
         tools:targetApi="33" >
+
+        <meta-data
+            android:name="fake-signature"
+            android:value="@string/fake_signature" />
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
+
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
+            android:windowSoftInputMode="adjustResize"
+            android:hardwareAccelerated="true"
             android:theme="@style/Theme.Androntainer.NoActionBar" >
             <meta-data
                 android:name="io.flutter.embedding.android.NormalTheme"
@@ -33,45 +43,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <meta-data
-            android:name="fake-signature"
-            android:value="@string/fake_signature" />
-        <meta-data
-            android:name="flutterEmbedding"
-            android:value="2" />
-
-<!--        <activity-->
-<!--            android:name=".activity.Main0Activity"-->
-<!--            android:configChanges="orientation|keyboardHidden|screenSize"-->
-<!--            android:exported="true"-->
-<!--            android:theme="@style/Theme.Androntainer.Fullscreen" >-->
-<!--            <meta-data-->
-<!--                android:name="io.flutter.embedding.android.NormalTheme"-->
-<!--                android:resource="@style/NormalTheme" />-->
-
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--&lt;!&ndash;                <category android:name="android.intent.category.LAUNCHER" />&ndash;&gt;-->
-<!--            </intent-filter>-->
-<!--        </activity> &lt;!&ndash; MainActivity &ndash;&gt;-->
-<!--        <activity-->
-<!--            android:name=".activity.Main1Activity"-->
-<!--            android:configChanges="orientation|keyboardHidden|screenSize"-->
-<!--            android:exported="true" >-->
-<!--            <meta-data-->
-<!--                android:name="io.flutter.embedding.android.NormalTheme"-->
-<!--                android:resource="@style/NormalTheme" />-->
-
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                &lt;!&ndash; <category android:name="android.intent.category.LAUNCHER" /> &ndash;&gt;-->
-<!--            </intent-filter>-->
-<!--        </activity> &lt;!&ndash; Test Activity &ndash;&gt;-->
         <activity
-            android:name=".test.FlutterTest"
+            android:name=".activity.FlutterActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:exported="true"
             android:hardwareAccelerated="true"
@@ -86,17 +59,7 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".test.ComposeTest"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-            android:exported="true"
-            android:hardwareAccelerated="true"
-            android:launchMode="singleTop"
-            android:windowSoftInputMode="adjustResize" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
+
 
         <service
             android:name=".service.InAppBillingService"
