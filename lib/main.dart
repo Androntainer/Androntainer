@@ -37,10 +37,10 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 1145141919810;
 
   void _incrementCounter() {
-    // setState(() {
-    //   _counter++;
-    // });
-    origin();
+    setState(() {
+      _counter++;
+    });
+    //origin();
   }
 
   void origin() {
@@ -67,7 +67,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text('压力马斯内'),
+            const Text(
+              '压力马斯内',
+            ),
             const Text(
               'You have pushed the button this many times:',
             ),
@@ -75,13 +77,12 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
+            TextButton(
+                onPressed: _incrementCounter,
+                child: const Text("增加")
+            )
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }

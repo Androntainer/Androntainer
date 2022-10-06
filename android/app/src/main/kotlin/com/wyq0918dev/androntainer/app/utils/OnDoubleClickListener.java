@@ -1,4 +1,4 @@
-package com.wyq0918dev.androntainer.core.utils;
+package com.wyq0918dev.androntainer.app.utils;
 
 import android.annotation.SuppressLint;
 import android.os.Handler;
