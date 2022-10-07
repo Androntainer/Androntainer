@@ -33,7 +33,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   static const channel = MethodChannel("android");
-  final String origin0 = "";
+  final String origin = "origin";
   int _counter = 1145141919810;
 
   void _incrementCounter() {
@@ -43,9 +43,9 @@ class _MyHomePageState extends State<MyHomePage> {
     //origin();
   }
 
-  void origin() {
+  void _origin() {
     try {
-      Future future = channel.invokeMethod("origin");
+      Future future = channel.invokeMethod(origin);
       if (kDebugMode) {
         print(future.toString());
       }
@@ -80,6 +80,10 @@ class _MyHomePageState extends State<MyHomePage> {
             TextButton(
                 onPressed: _incrementCounter,
                 child: const Text("增加")
+            ),
+            TextButton(
+                onPressed: _origin,
+                child: const Text("隐藏")
             )
           ],
         ),
