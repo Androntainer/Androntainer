@@ -2,10 +2,10 @@
 
 Androntainer Project.
 
-## ReadMe
+## README
 
-- [Chinese](https://gitee.com/androntainer/Androntainer/blob/master/readme/README_CN.md)
-- [English](https://gitee.com/androntainer/Androntainer/blob/master/readme/README_US.md)
+- [Chinese](https://github.com/Androntainer/Androntainer/blob/master/readme/README.cn.md)
+- [English](https://github.com/Androntainer/Androntainer/blob/master/readme/README.en.md)
 
 ## Getting Started
 
