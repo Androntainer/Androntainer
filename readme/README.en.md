@@ -1,7 +1,7 @@
-# Androntainer_flutter
+# Androntainer
 
 #### Description
-Androntainer project flutter edition
+Androntainer Project.
 
 #### Software Architecture
 Software architecture description

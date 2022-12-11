@@ -1,7 +1,7 @@
-# Androntainer_flutter
+# Androntainer
 
 #### 介绍
-Androntainer project flutter edition
+Androntainer Project.
 
 #### 软件架构
 软件架构说明

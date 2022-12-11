@@ -1,3 +1,0 @@
-# Androntainer
-
-Androntainer Project.
