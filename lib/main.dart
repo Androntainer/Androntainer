@@ -1,8 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((value) => runApp(const MyApp()));
   runApp(const MyApp());
 }
 
@@ -12,12 +17,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const title = "Androntainer";
-    return MaterialApp(
+    return const CupertinoApp(
       title: title,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: title),
+      theme: CupertinoThemeData(brightness: Brightness.light),
+      home: MyHomePage(title: title),
     );
   }
 }
@@ -49,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
       if (kDebugMode) {
         print(future.toString());
       }
-    } on PlatformException catch(e) {
+    } on PlatformException catch (e) {
       if (kDebugMode) {
         print(e.toString());
       }
@@ -58,36 +61,98 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    return CupertinoTabScaffold(
+      // appBar: AppBar(
+      //   title: Text(widget.title),
+      // ),
+      // body: Center(
+      //   child: Column(
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     children: <Widget>[
+      //       const Text(
+      //         '压力马斯内',
+      //       ),
+      //       const Text(
+      //         'You have pushed the button this many times:',
+      //       ),
+      //       Text(
+      //         '$_counter',
+      //         style: Theme.of(context).textTheme.headline4,
+      //       ),
+      //       TextButton(
+      //           onPressed: _incrementCounter,
+      //           child: const Text("增加")
+      //       ),
+      //       TextButton(
+      //           onPressed: _origin,
+      //           child: const Text("隐藏")
+      //       )
+      //     ],
+      //   ),
+      // ),
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
+      // navigationBar: CupertinoNavigationBar(
+      //   middle: Text('Chat App'),
+      // ),
+
+      tabBar: CupertinoTabBar(
+        currentIndex: 1,
+        items: const <BottomNavigationBarItem>[
+          // 3 <-- SEE HERE
+          BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.phone), label: 'Calls'),
+          BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.chat_bubble_2), label: 'Chats'),
+          BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.settings), label: 'Settings'),
+        ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              '压力马斯内',
-            ),
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-            TextButton(
-                onPressed: _incrementCounter,
-                child: const Text("增加")
-            ),
-            TextButton(
-                onPressed: _origin,
-                child: const Text("隐藏")
-            )
-          ],
-        ),
-      ),
+      tabBuilder: (context, index) {
+        late final CupertinoTabView returnValue;
+        switch (index) {
+          case 0:
+            // 4 <-- SEE HERE
+            returnValue = CupertinoTabView(
+              builder: (context) {
+                return const CupertinoPageScaffold(
+                    navigationBar: CupertinoNavigationBar(
+                      middle: Text('Calls'),
+                    ),
+                    child: Center(child: Text('Calls')));
+              }
+            );
+            break;
+          case 1:
+            returnValue = CupertinoTabView(
+              builder: (context) {
+                return const CupertinoPageScaffold(
+                    navigationBar: CupertinoNavigationBar(
+                      middle: Text('Chats'),
+                    ),
+                    child: Center(child: Text('Chats')));
+              }
+            );
+            break;
+          case 2:
+            returnValue = CupertinoTabView(
+              builder: (context) {
+                return const CupertinoPageScaffold(
+                    navigationBar: CupertinoNavigationBar(
+                      middle: Text('Settings'),
+                    ),
+                    child: Center(child: Text('Settings')));
+              },
+            );
+            break;
+        }
+        return returnValue;
+      },
+
+      // children: [
+      //   Center(
+      //     child: Text('Hi'),
+      //   ),
+      // ],
     );
   }
 }
