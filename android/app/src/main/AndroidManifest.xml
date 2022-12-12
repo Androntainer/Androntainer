@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:name=".Application"
+        android:name=".MainApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:forceQueryable="true"
@@ -20,14 +20,18 @@
         tools:targetApi="33" >
 
         <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
+        <meta-data
             android:name="fake-signature"
             android:value="@string/fake_signature" />
         <meta-data
-            android:name="flutterEmbedding"
-            android:value="2" />
+            android:name="android.app.lib_name"
+            android:value="" />
+
 
         <activity
-            android:name=".MainActivity"
+            android:name=".MainApp$Androntainer$App$MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
             android:windowSoftInputMode="adjustResize"
@@ -40,7 +44,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FlutterActivity"
+            android:name=".MainApp$Androntainer$App$FlutterAct"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:exported="true"
             android:hardwareAccelerated="true"
@@ -55,9 +59,34 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MainApp$Androntainer$App$Google"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainApp$Androntainer$App$SelectOne"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.tumuyan.applist" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainApp$Androntainer$App$FixedSettings"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <service
-            android:name=".InAppBillingService"
+            android:name=".MainApp$Androntainer$App$InAppBillingService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.android.vending.billing.InAppBillingService.BIND" />

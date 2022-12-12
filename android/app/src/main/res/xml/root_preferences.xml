@@ -1,34 +1,55 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="@string/messages_header">
+    <PreferenceCategory app:title="@string/app_name">
 
-        <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
-            app:useSimpleSummaryProvider="true" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="dynamic_colors"
+            android:title="使用系统主题颜色"
+            android:summary="重启应用后生效,仅支持安卓12+"/>
 
-        <ListPreference
-            app:defaultValue="reply"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
-            app:key="reply"
-            app:title="@string/reply_title"
-            app:useSimpleSummaryProvider="true" />
+        <Preference
+            app:key="about"
+            app:title="关于"
+            android:summary="@string/app_name"/>
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/sync_header">
+    <PreferenceCategory
+        app:title="LibTaskbar"
+        android:key="libtaskbar">
 
-        <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="@string/sync_title" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="desktop"
+            android:title="使用完整桌面模式"
+            android:summary="重启应用后生效,仅支持安卓10+"/>
 
-        <SwitchPreferenceCompat
-            app:dependency="sync"
-            app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
+        <Preference
+            app:dependency="desktop"
+            app:key="config_desktop"
+            app:title="配置桌面模式相关权限"
+            app:summary="设置此应用的桌面模式相关权限"/>
+
+        <Preference
+            app:dependency="desktop"
+            app:key="taskbar"
+            app:title="桌面模式设置"
+            app:summary="LibTaskbar"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Launcher">
+
+        <Preference
+            app:key="fixed_play"
+            app:title="选择次要启动器" />
+
+        <Preference
+            app:key="default_launcher"
+            app:title="系统默认主屏幕设置"
+            app:summary="将此应用设为默认主屏幕应用以在副屏开启完整桌面模式"/>
 
     </PreferenceCategory>
 

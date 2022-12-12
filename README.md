@@ -1,21 +1,25 @@
 # Androntainer
 
 Androntainer Project.
+- Androntainer 开源项目
+- 这是项目的初始自述。
+- 查看简体中文或者英语的自述文件请转到[项目自述文件]。
+- 此项目使用Flutter开发，支持Android、iOS、Linux、macOS、Windows，查看Flutter相关内容请转到[入门指南]
 
-## README
+## 项目自述文件
 
-- [Chinese](https://github.com/Androntainer/Androntainer/blob/master/readme/README.cn.md)
-- [English](https://github.com/Androntainer/Androntainer/blob/master/readme/README.en.md)
+- [自述文件 - 简体中文](https://github.com/Androntainer/Androntainer/blob/master/readme/README.cn.md)
+- [README - English](https://github.com/Androntainer/Androntainer/blob/master/readme/README.en.md)
 
-## Getting Started
+## 入门指南
 
-This project is a starting point for a Flutter application.
+这个项目是Flutter应用程序的起点。
 
-A few resources to get you started if this is your first Flutter project:
+如果这是您的第一个Flutter项目，可以参考一些资源:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- [实验室:编写你的第一个Flutter应用程序](https://flutter.cn/docs/get-started/codelab)
+- [烹饪书:有用的颤振样本](https://flutter.cn/docs/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+有关如何开始Flutter开发的帮助，请查看
+[在线文档](https://flutter.cn/docs)，它提供教程，
+样本，移动开发指南，以及完整的API参考。

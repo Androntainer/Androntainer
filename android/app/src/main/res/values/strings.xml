@@ -3,9 +3,22 @@
     <string name="description">Androntainer Project.</string>
     <string name="todo">\t</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_apps">Apps</string>
 
+    <string name="menu_navigation">Navigation</string>
+    <string name="menu_launcher">Launcher</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_dashboard">Dashboard</string>
+    <string name="menu_settings">Settings</string>
+
+    <string name="title_select_app">Select App</string>
+    <string name="title_launcher_settings">Luncher Settings</string>
+    <string name="title_selected">Selected</string>
+    <string name="error_could_not_start">Not supported application.</string>
+    <string name="btf">Prioritize switching from the background to the foreground</string>
+    <string name="act">Reopen the app Activity every time</string>
+    <string name="mode">Select working mode</string>
+    <string name="hhmm" translatable="false">HHMM</string>
+    <string name="yyyymmdde" translatable="false">YYYYMMDDE</string>
 
 
 
@@ -24,7 +37,7 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
-
+    <string name="action_settings">Settings</string>
 
 
 </resources>
