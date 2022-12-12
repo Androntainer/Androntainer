@@ -6,7 +6,7 @@ Androntainer Project.
 - 查看简体中文或者英语的自述文件请转到[项目自述文件]。
 - 此项目使用Flutter开发，支持Android、iOS、Linux、macOS、Windows，查看Flutter相关内容请转到[入门指南]
 
-## 项目自述文件
+## Readme
 
 - [自述文件 - 简体中文](https://github.com/Androntainer/Androntainer/blob/master/readme/README.cn.md)
 - [README - English](https://github.com/Androntainer/Androntainer/blob/master/readme/README.en.md)
