@@ -5,7 +5,7 @@ Androntainer 项目.
 - Androntainer 开源项目
 - 这是项目的初始自述。
 - 查看简体中文或者英语的自述文件请转到[自述文件](https://github.com/Androntainer/Androntainer#readme)。
-- 此项目使用Flutter开发，查看Flutter相关内容请转到[Flutter入门指南](https://github.com/Androntainer/Androntainer#flutter-getting-started)。
+- 此项目使用Flutter开发，查看Flutter相关内容请转到[ Flutter 入门指南](https://github.com/Androntainer/Androntainer#flutter-getting-started)。
 - 受支持的操作系统Android(推荐)、iOS、Linux、macOS、Windows。
 
 ### English

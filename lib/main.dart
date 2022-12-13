@@ -62,41 +62,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
-      // appBar: AppBar(
-      //   title: Text(widget.title),
-      // ),
-      // body: Center(
-      //   child: Column(
-      //     mainAxisAlignment: MainAxisAlignment.center,
-      //     children: <Widget>[
-      //       const Text(
-      //         '压力马斯内',
-      //       ),
-      //       const Text(
-      //         'You have pushed the button this many times:',
-      //       ),
-      //       Text(
-      //         '$_counter',
-      //         style: Theme.of(context).textTheme.headline4,
-      //       ),
-      //       TextButton(
-      //           onPressed: _incrementCounter,
-      //           child: const Text("增加")
-      //       ),
-      //       TextButton(
-      //           onPressed: _origin,
-      //           child: const Text("隐藏")
-      //       )
-      //     ],
-      //   ),
-      // ),
-
-      // navigationBar: CupertinoNavigationBar(
-      //   middle: Text('Chat App'),
-      // ),
-
       tabBar: CupertinoTabBar(
-        currentIndex: 1,
+        currentIndex: 0,
         items: const <BottomNavigationBarItem>[
           // 3 <-- SEE HERE
           BottomNavigationBarItem(
@@ -112,26 +79,22 @@ class _MyHomePageState extends State<MyHomePage> {
         switch (index) {
           case 0:
             // 4 <-- SEE HERE
-            returnValue = CupertinoTabView(
-              builder: (context) {
-                return const CupertinoPageScaffold(
-                    navigationBar: CupertinoNavigationBar(
-                      middle: Text('Calls'),
-                    ),
-                    child: Center(child: Text('Calls')));
-              }
-            );
+            returnValue = CupertinoTabView(builder: (context) {
+              return const CupertinoPageScaffold(
+                  navigationBar: CupertinoNavigationBar(
+                    middle: Text('Calls'),
+                  ),
+                  child: Center(child: Text('Calls')));
+            });
             break;
           case 1:
-            returnValue = CupertinoTabView(
-              builder: (context) {
-                return const CupertinoPageScaffold(
-                    navigationBar: CupertinoNavigationBar(
-                      middle: Text('Chats'),
-                    ),
-                    child: Center(child: Text('Chats')));
-              }
-            );
+            returnValue = CupertinoTabView(builder: (context) {
+              return const CupertinoPageScaffold(
+                  navigationBar: CupertinoNavigationBar(
+                    middle: Text('Chats'),
+                  ),
+                  child: Center(child: Text('Chats')));
+            });
             break;
           case 2:
             returnValue = CupertinoTabView(
@@ -147,12 +110,6 @@ class _MyHomePageState extends State<MyHomePage> {
         }
         return returnValue;
       },
-
-      // children: [
-      //   Center(
-      //     child: Text('Hi'),
-      //   ),
-      // ],
     );
   }
 }
