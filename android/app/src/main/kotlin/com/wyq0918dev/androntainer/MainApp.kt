@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.graphics.drawable.Drawable
 import android.os.*
+import android.provider.Settings
 import android.util.Log
 import android.view.*
 import android.widget.*
@@ -40,8 +41,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.FragmentManager
-import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceManager
+import androidx.preference.*
 import com.android.vending.billing.IInAppBillingService
 import com.blankj.utilcode.util.AppUtils
 import com.farmerbb.taskbar.lib.Taskbar
@@ -90,30 +90,29 @@ class MainApp : BaseApp<MainApp>() {
             }
         }
 
-        setOnCrashListener(object : OnBugReportListener() {
-            override fun onCrash(e: Exception, crashLogFile: File): Boolean {
-                if (AppManager.getInstance().activeActivity == null || !AppManager.getInstance().activeActivity.isActive) {
+        setOnCrashListener(
+            object : OnBugReportListener() {
+                override fun onCrash(e: Exception, crashLogFile: File): Boolean {
+                    if (AppManager.getInstance().activeActivity == null || !AppManager.getInstance().activeActivity.isActive) {
+                        return false
+                    }
+                    AlertDialog.Builder(AppManager.getInstance().activeActivity)
+                        .setTitle("Ops！发生了一次崩溃！")
+                        .setMessage("您是否愿意帮助我们改进程序以修复此Bug？")
+                        .setPositiveButton("愿意") { _, _ ->
+                            //val url = crashLogFile.absolutePath
+                            toast("我真的会谢")
+                        }
+                        .setNegativeButton("不了") { _, _ ->
+                            toast("抱歉打扰了")
+                        }
+                        .setCancelable(false)
+                        .create()
+                        .show()
                     return false
                 }
-
-
-                AlertDialog.Builder(AppManager.getInstance().activeActivity)
-                    .setTitle("Ops！发生了一次崩溃！")
-                    .setMessage("您是否愿意帮助我们改进程序以修复此Bug？")
-                    .setPositiveButton("愿意") { _, _ ->
-                        //val url = crashLogFile.absolutePath
-                        toast("我真的会谢")
-                    }
-                    .setNegativeButton("不了") { _, _ ->
-                        toast("抱歉打扰了")
-                    }
-                    .setCancelable(false)
-                    .create()
-                    .show()
-
-                return false
             }
-        })
+        )
     }
 
     // 加载SDK
@@ -131,6 +130,8 @@ class MainApp : BaseApp<MainApp>() {
     class Androntainer {
 
         class Abstract {
+
+            abstract class AndrontainerApplication : FlutterApplication()
 
             abstract class AndrontainerSplash : BaseActivity() {
 
@@ -240,6 +241,8 @@ class MainApp : BaseApp<MainApp>() {
                 abstract fun setEvent()
             }
 
+            abstract class AndrontainerFlutter : FlutterActivity()
+
             abstract class LibraryActivity : BaseActivity() {
 
                 private val context: BaseActivity = me
@@ -329,20 +332,20 @@ class MainApp : BaseApp<MainApp>() {
                 abstract fun contentView(): View?
             }
 
-            class AndrontainerFragment<activity : AndrontainerActivity> : BaseFragment<activity>() {
-                override fun initViews() {
-                    TODO("Not yet implemented")
-                }
-
-                override fun initDatas() {
-                    TODO("Not yet implemented")
-                }
-
-                override fun setEvents() {
-                    TODO("Not yet implemented")
-                }
-
-            }
+//            class AndrontainerFragment<activity : AndrontainerActivity> : BaseFragment<activity>() {
+//                override fun initViews() {
+//                    TODO("Not yet implemented")
+//                }
+//
+//                override fun initDatas() {
+//                    TODO("Not yet implemented")
+//                }
+//
+//                override fun setEvents() {
+//                    TODO("Not yet implemented")
+//                }
+//
+//            }
 
             abstract class AndrontainerSettings : PreferenceFragmentCompat() {
 
@@ -357,7 +360,7 @@ class MainApp : BaseApp<MainApp>() {
 
         class App {
 
-            class FlutterApp : FlutterApplication() {
+            class FlutterApp : Abstract.AndrontainerApplication() {
 
                 fun init(application: Application) {
                     Utils.Flutter().initSDK(application)
@@ -367,8 +370,6 @@ class MainApp : BaseApp<MainApp>() {
                     Utils.Flutter().launcher(application)
                 }
             }
-
-            class FlutterAct : FlutterActivity()
 
             @SuppressLint("CustomSplashScreen")
             class SplashScreen : Abstract.AndrontainerSplash() {
@@ -380,12 +381,13 @@ class MainApp : BaseApp<MainApp>() {
             }
 
             class MainActivity : Abstract.AndrontainerActivity() {
-
-                private var flutterFragment = FlutterPage.flutterFragment
-
+                // View
                 private lateinit var toolbar: MaterialToolbar
                 private lateinit var logo: AppCompatImageView
                 private lateinit var greeting: ComposeView
+
+                // Flutter
+                private var flutterFragment = FlutterPage.flutterFragment
 
                 private var androidVersion: String = "unknown"
 
@@ -394,6 +396,7 @@ class MainApp : BaseApp<MainApp>() {
                 private var targetDescription: String by mutableStateOf("unknown")
 
                 override fun initView() {
+
                     toolbar = MaterialToolbar(
                         viewContext
                     ).apply {
@@ -465,7 +468,13 @@ class MainApp : BaseApp<MainApp>() {
                     val startRadius = hypot(logo.width.toFloat(), logo.height.toFloat())
                     val endRadius = hypot(greeting.width.toFloat(), greeting.height.toFloat())
                     val circularAnim = ViewAnimationUtils
-                        .createCircularReveal(greeting, cx.toInt(), cy.toInt(), startRadius, endRadius)
+                        .createCircularReveal(
+                            greeting,
+                            cx.toInt(),
+                            cy.toInt(),
+                            startRadius,
+                            endRadius
+                        )
                         .setDuration(800)
                     logo.animate()
                         .alpha(0f)
@@ -495,6 +504,7 @@ class MainApp : BaseApp<MainApp>() {
 
                 }
 
+                @Suppress("DEPRECATION")
                 override fun initSystemBar() {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
                     WindowCompat.setDecorFitsSystemWindows(window, true)
@@ -553,7 +563,8 @@ class MainApp : BaseApp<MainApp>() {
                                 super.onDestroy(me, className)
                                 when (me) {
                                     MainActivity() -> {
-                                        //greeting.removeCallbacks(this@MainActivity)
+                                        greeting.removeCallbacks(this@MainActivity)
+                                        flutterFragment = null
                                     }
                                 }
                             }
@@ -648,8 +659,31 @@ class MainApp : BaseApp<MainApp>() {
                     FlutterPage.flutterFragment?.onTrimMemory(level)
                 }
 
-                private fun optionsMenu() {
-                    toolbar.showOverflowMenu()
+
+            }
+
+            class FlutterAct : Abstract.AndrontainerFlutter() {
+
+                override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+                    super.configureFlutterEngine(flutterEngine)
+
+                    GeneratedPluginRegistrant.registerWith(flutterEngine)
+                    val registry = flutterEngine.platformViewsController.registry
+                    registry.registerViewFactory("android_view", Classes.LinkNativeViewFactory())
+
+                    val messenger = flutterEngine.dartExecutor.binaryMessenger
+                    val channel = MethodChannel(messenger, "android")
+                    channel.setMethodCallHandler { call, res ->
+                        when (call.method) {
+                            "origin" -> {
+                                //flutter.visibility = INVISIBLE
+                                res.success("success")
+                            }
+                            else -> {
+                                res.error("error", "error_message", null)
+                            }
+                        }
+                    }
                 }
             }
 
@@ -786,7 +820,7 @@ class MainApp : BaseApp<MainApp>() {
                     val toolbar: Toolbar = binding.toolbar
                     // Click
                     button1.setOnClickListener {
-                        //Core.selectLauncher(this@FixedSettings)
+                        Core().defaultLauncher(this@FixedSettings)
                     }
                     button2.setOnClickListener {
                         button2()
@@ -1049,6 +1083,55 @@ class MainApp : BaseApp<MainApp>() {
                     var flutterFragment: FlutterFragment? = null
                 }
             }
+
+            class Settings : Abstract.AndrontainerSettings() {
+
+                override fun events() {
+                    val sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(requireActivity())
+
+                    val dynamic: SwitchPreference? = findPreference("dynamic_colors")
+                    val about: Preference? = findPreference("about")
+                    val taskbarCategory: PreferenceCategory? = findPreference("libtaskbar")
+                    val desktop: SwitchPreference? = findPreference("desktop")
+                    val config: Preference? = findPreference("config_desktop")
+                    val taskbar: Preference? = findPreference("taskbar")
+                    val fixed: Preference? = findPreference("fixed_play")
+                    val default: Preference? = findPreference("default_launcher")
+
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+                        dynamic?.isChecked = sharedPreferences.getBoolean("developer", false)
+                        dynamic?.isEnabled = sharedPreferences.getBoolean("developer", false)
+                    }
+                    about?.setOnPreferenceClickListener {
+                        // 跳转关于页面
+                        true
+                    }
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                        taskbarCategory?.isEnabled =
+                            sharedPreferences.getBoolean("developer", false)
+                        desktop?.isChecked = sharedPreferences.getBoolean("developer", false)
+                    }
+                    config?.setOnPreferenceClickListener {
+                        // 跳转权限配置界面
+                        true
+                    }
+                    taskbar?.setOnPreferenceClickListener {
+                        Core().taskbarSettings(requireActivity())
+                        true
+                    }
+                    fixed?.setOnPreferenceClickListener {
+                        Core().launcherSettings(requireActivity())
+                        true
+                    }
+                    default?.setOnPreferenceClickListener {
+                        Core().defaultLauncher(requireActivity())
+                        true
+                    }
+                }
+            }
+
+
         }
 
         class Utils {
@@ -1057,7 +1140,7 @@ class MainApp : BaseApp<MainApp>() {
 
                 // 加载SDK
                 fun initSDK(application: Application) {
-                    Core().initFlutter(application)
+                    Core().initFlutter()
                     Core().initDynamicColors(application)
                     Core().initDialogX(application)
                     Core().initTaskbar(application)
@@ -1072,12 +1155,16 @@ class MainApp : BaseApp<MainApp>() {
             class Splash {
 
                 // 启动主页面
-                fun launcher(application: Application) {
-                    Core().launch(application)
+                fun launcher(context: Context) {
+                    Core().launch(context)
                 }
             }
 
-            class Main {
+            class Main() {
+
+                fun optionsMenu(toolbar: Toolbar) {
+                    toolbar.showOverflowMenu()
+                }
 
                 // 获取系统版本
                 fun getAndroidVersion(): String {
@@ -1347,9 +1434,10 @@ class MainApp : BaseApp<MainApp>() {
 
         class Core {
 
-            fun initFlutter(application: Application) {
+            fun initFlutter() {
                 App.FlutterApp().apply {
-                    application.onCreate()
+                    onCreate()
+                    currentActivity = AppManager.getInstance().currentActivity()
                 }
             }
 
@@ -1435,6 +1523,35 @@ class MainApp : BaseApp<MainApp>() {
                         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
                     }
                 }
+            }
+
+            /**
+             * Settings
+             */
+
+            fun taskbarSettings(context: Context) {
+                Taskbar.openSettings(context, "桌面模式设置", R.style.Theme_Taskbar)
+            }
+
+            fun defaultLauncher(context: Context) {
+                val intent = Intent(android.provider.Settings.ACTION_HOME_SETTINGS)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(intent)
+            }
+
+            fun launcherSettings(context: Context) {
+                val intent = Intent(context, App.FixedSettings().javaClass)
+                context.startActivity(intent)
+            }
+
+
+            /**
+             * 打开桌面
+             */
+
+            fun startLauncher(context: Context) {
+                val intent = Intent(context, App.FixedPlay().javaClass)
+                context.startActivity(intent)
             }
         }
 
@@ -1698,7 +1815,6 @@ class MainApp : BaseApp<MainApp>() {
                 class ViewSystem {
 
                     // MainActivity的根页面布局
-                    @SuppressLint("InflateParams")
                     fun activityMainLayout(
                         viewContext: Context,
                         toolbar: MaterialToolbar,
@@ -1715,7 +1831,6 @@ class MainApp : BaseApp<MainApp>() {
                                     viewContext
                                 ).apply {
                                     fitsSystemWindows = true
-                                    //viewContext.setTheme(com.google.android.material.R.style.ThemeOverlay_Material3_ActionBar)
                                     addView(
                                         toolbar,
                                         ViewGroup.LayoutParams(

@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 void main() {
@@ -17,10 +17,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const title = "Androntainer";
-    return const CupertinoApp(
+    return MaterialApp(
       title: title,
-      theme: CupertinoThemeData(brightness: Brightness.light),
-      home: MyHomePage(title: title),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const MyHomePage(title: title),
     );
   }
 }
@@ -35,6 +37,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   static const channel = MethodChannel("android");
   final String origin = "origin";
   int _counter = 1145141919810;
@@ -61,55 +64,29 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoTabScaffold(
-      tabBar: CupertinoTabBar(
-        currentIndex: 0,
-        items: const <BottomNavigationBarItem>[
-          // 3 <-- SEE HERE
-          BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.phone), label: 'Calls'),
-          BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.chat_bubble_2), label: 'Chats'),
-          BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.settings), label: 'Settings'),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
       ),
-      tabBuilder: (context, index) {
-        late final CupertinoTabView returnValue;
-        switch (index) {
-          case 0:
-            // 4 <-- SEE HERE
-            returnValue = CupertinoTabView(builder: (context) {
-              return const CupertinoPageScaffold(
-                  navigationBar: CupertinoNavigationBar(
-                    middle: Text('Calls'),
-                  ),
-                  child: Center(child: Text('Calls')));
-            });
-            break;
-          case 1:
-            returnValue = CupertinoTabView(builder: (context) {
-              return const CupertinoPageScaffold(
-                  navigationBar: CupertinoNavigationBar(
-                    middle: Text('Chats'),
-                  ),
-                  child: Center(child: Text('Chats')));
-            });
-            break;
-          case 2:
-            returnValue = CupertinoTabView(
-              builder: (context) {
-                return const CupertinoPageScaffold(
-                    navigationBar: CupertinoNavigationBar(
-                      middle: Text('Settings'),
-                    ),
-                    child: Center(child: Text('Settings')));
-              },
-            );
-            break;
-        }
-        return returnValue;
-      },
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              'You have pushed the button this many times:',
+            ),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headline4,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
